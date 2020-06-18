@@ -48,13 +48,14 @@ def add_new_row(sheet, movie_title):
                 recommendation = 'Yes'
                 row.append(recommendation)
                 break
-            elif recommendation_str[0] == str(2) or recommendation[0].lower() == 'n':
+            elif recommendation_str[0] == str(2) or recommendation_str[0].lower() == 'n':
                 recommendation = 'No'
                 row.append(recommendation)
                 break
-            elif recommendation_str[0] == str(3) or recommendation[0].lower() == 'h':
+            elif recommendation_str[0] == str(3) or recommendation_str[0].lower() == 'h':
                 recommendation = "Haven't Seen"
                 row.append(recommendation)
+                break
         except:
             pass
     print()
@@ -105,6 +106,7 @@ def add_new_row(sheet, movie_title):
                 if selection <= len(movie_list) and selection > 0:
                     imdb_url = "www.imdb.com/title/tt" + movie_list[selection-1].movieID
                     release_year = movie_list[selection-1]['year']
+                    row[0] = movie_list[selection-1]['title']
                     row.append(imdb_url)
                     # append release year from IMDB
                     row.append(release_year)
