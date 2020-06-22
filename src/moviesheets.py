@@ -5,6 +5,8 @@ import imdb
 import Levenshtein
 import time
 
+# TODO: Make a config argument and config file so you can change this stuff
+
 # great tutorial on using python for google sheets and using the google API
 #   also covers how to get your credentials json
 # https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
@@ -31,6 +33,8 @@ Opens a spreadsheet and returns a reference to it using google sheets credential
 """
 def open_spreadsheet(sheet_name):
     # use creds to create a client to interact with the Google Drive API
+    # for some reason you need to add this extra url in the scope but I don't know why fixes this error:
+    #   https://stackoverflow.com/questions/49258566/gspread-authentication-throwing-insufficient-permission
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name(path_to_credentials, scope)
