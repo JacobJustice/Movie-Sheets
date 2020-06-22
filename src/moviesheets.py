@@ -5,6 +5,13 @@ import imdb
 import Levenshtein
 import time
 
+# great tutorial on using python for google sheets and using the google API
+#   also covers how to get your credentials json
+# https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
+path_to_credentials = '/home/jacob/Programs/Movie-Sheets/client_secret.json'
+# used to access the correct spreadsheet
+sheet_name = "Movies"
+
 """
 A row in the spreadsheet contains:
     title		string
@@ -16,11 +23,17 @@ A row in the spreadsheet contains:
     release year	int
 """
 
+"""
+Opens a spreadsheet and returns a reference to it using google sheets credentials
+
+@param sheet_name: string containing name of spreadsheet on Google Sheets
+@return: sheet object
+"""
 def open_spreadsheet(sheet_name):
     # use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('../client_secret.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(path_to_credentials, scope)
     client = gspread.authorize(creds)
 
     # Find a workbook by name and open the first sheet
@@ -144,6 +157,8 @@ Modifies a row
 @param index: index of 
 """
 def modify_row(sheet, movie_title, index):
+    # TODO:
+    # implement row modification
     pass
 
 
@@ -169,8 +184,6 @@ def get_movie_title(sheet, existing_titles):
 
 
 def main():
-    # used to access the correct spreadsheet
-    sheet_name = "Movies"
     sheet = open_spreadsheet(sheet_name)
 
     # Get list of existing movie titles
