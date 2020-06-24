@@ -13,6 +13,8 @@ import time
 path_to_credentials = '/home/jacob/Programs/Movie-Sheets/client_secret.json'
 # used to access the correct spreadsheet
 sheet_name = "Movies"
+# used to show how many movies are similar to the input
+DISTANCE_THRESHOLD = 8
 
 """
 A row in the spreadsheet contains:
@@ -74,6 +76,7 @@ def add_new_row(sheet, movie_title):
                 row.append(recommendation)
                 break
         except:
+            # TODO: check for keyboard interrupt
             pass
     print()
 
@@ -87,6 +90,7 @@ def add_new_row(sheet, movie_title):
                 row.append(rating)
                 break
             except:
+                # TODO: check for keyboard interrupt
                 pass
         print()
 
@@ -114,6 +118,7 @@ def add_new_row(sheet, movie_title):
                 # slow option but it works and really helps narrow down what movie it is
                 print(*ia.get_movie(movie.movieID)['directors'], sep=',')
             except:
+                # TODO: check for keyboard interrupt
                 print("No director found")
 
         # get an index from the user
@@ -129,6 +134,7 @@ def add_new_row(sheet, movie_title):
                     row.append(release_year)
                     break
             except:
+                # TODO: check for keyboard interrupt
                 # continues to loop if they don't input an int
                 # or it's greater than the number of selections
                 pass
@@ -163,11 +169,14 @@ Modifies a row
 def modify_row(sheet, movie_title, index):
     # TODO:
     # implement row modification
+
+    print("Needs to be implemented!")
     pass
 
 
 """
-Figures out which movie the user wants to interact with
+Figures out which movie the user wants to interact with,
+uses Levenshtein distance to help with typos
 
 @return: string of movie title and index of it's position in the 
 existing_titles list, if it exists there (-1 if it doesn't)
@@ -176,15 +185,38 @@ existing_titles list, if it exists there (-1 if it doesn't)
 def get_movie_title(sheet, existing_titles):
     movie_title = input("Which movie would you like to add/edit?\n")
 
-    # TODO:
-    # use Levenshtein distance to compute if that title is similar or exactly 
-    # the same as another title
+    # If the title doesn't exactly match any of the titles (Levenshtein distance of 0)
+    # display titles that are similar (under a threshold) in order of most similar
 
+    # generate list of tuples containing distance and location of titles in existing_titles
+    distances = []
+    acceptable_distances = []
     for i, title in enumerate(existing_titles):
-        if title == movie_title:
+        distances.append((Levenshtein.distance(movie_title.lower(), existing_titles[i].lower()), i))
+        if distances[i][0] == 0:
             return movie_title, i
+        elif distances[i][0] < DISTANCE_THRESHOLD:
+            acceptable_distances.append(distances[i])
+    acceptable_distances.sort()
 
-    return movie_title, -1
+    # print selection options
+    print("\nIs your movie one of these?")
+    print("1) None of these (add a new movie)")
+    for i, movie in enumerate(acceptable_distances):
+        print(i+2, ") ", existing_titles[acceptable_distances[i][1]], "; ", acceptable_distances[i][0])
+
+    while True:
+        try:
+            #subtract 2 because of the offset used for intuitive displaying
+            existing_selection = int(input()) - 2
+            if existing_selection == -1:
+                return movie_title, -1
+            else:
+                return existing_titles[acceptable_distances[existing_selection][1]], acceptable_distances[existing_selection][1]  
+        except:
+            # TODO: check for keyboard interrupt
+            pass
+
 
 
 def main():
