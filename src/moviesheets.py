@@ -148,7 +148,10 @@ calls all other get_functions to construct row data
 """
 def get_row(movie_title, modifying=False):
     row = []
-    row.append(movie_title)
+    if not modifying:
+        row.append(movie_title)
+    else:
+        row.append(None)
 
     recommendation = get_recommendation()
     row.append(recommendation)
@@ -287,7 +290,7 @@ def modify_row(sheet, movie_title, index):
         elif modify_str == 8:
             while True:
                 try:
-                    print("Are you sure you want to delete the row for ",movie_title,"?",sep='')
+                    print("Are you sure you want to delete the row for ",movie_title,"? (Y/N)",sep='')
                     delete_yesno = input()
                     if delete_yesno[0].lower() == 'y':
                         print("Deleting row...\n")
@@ -329,22 +332,25 @@ def get_movie_title(sheet, existing_titles):
     acceptable_distances.sort()
 
     # print selection options
-    print("\nIs your movie one of these?")
-    print("1) None of these (add a new movie)")
-    for i, movie in enumerate(acceptable_distances):
-        print(i+2, ") ", existing_titles[acceptable_distances[i][1]], "; ", acceptable_distances[i][0])
+    if len(acceptable_distances) != 0:
+        print("\nIs your movie one of these?")
+        print("1) None of these (add a new movie)")
+        for i, movie in enumerate(acceptable_distances):
+            print(i+2, ") ", existing_titles[acceptable_distances[i][1]], "; ", acceptable_distances[i][0])
 
-    while True:
-        try:
-            #subtract 2 because of the offset used for intuitive displaying
-            existing_selection = int(input()) - 2
-            if existing_selection == -1:
-                return movie_title, -1
-            else:
-                return existing_titles[acceptable_distances[existing_selection][1]], acceptable_distances[existing_selection][1]  
-        except:
-            # TODO: check for keyboard interrupt
-            pass
+        while True:
+            try:
+                #subtract 2 because of the offset used for intuitive displaying
+                existing_selection = int(input()) - 2
+                if existing_selection == -1:
+                    return movie_title, -1
+                else:
+                    return existing_titles[acceptable_distances[existing_selection][1]], acceptable_distances[existing_selection][1]  
+            except:
+                # TODO: check for keyboard interrupt
+                pass
+    else:
+        return movie_title, -1
 
 
 def get_row_index(movie_title, existing_titles):
