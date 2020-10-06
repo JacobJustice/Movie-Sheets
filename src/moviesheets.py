@@ -10,7 +10,10 @@ import time
 # great tutorial on using python for google sheets and using the google API
 #   also covers how to get your credentials json
 # https://www.twilio.com/blog/2017/02/an-easy-way-to-read-and-write-to-a-google-spreadsheet-in-python.html
-path_to_credentials = '/home/jacob/Programs/Movie-Sheets/client_secret.json'
+
+
+
+path_to_credentials = '/home/jacob/Code/Movie-Sheets/client_secret.json'
 # used to access the correct spreadsheet
 sheet_name = "Movies"
 # used to show how many movies are similar to the input
@@ -230,9 +233,7 @@ def modify_row(sheet, movie_title, index):
     #row number is index+1
     row_number = index+1
 
-    # TODO:
-    # implement row modification
-    print(row_number, movie_title)
+    #print(row_number, movie_title)
 
     # Ask what the user wants to modify:
     #     whole row
@@ -336,7 +337,7 @@ def get_movie_title(sheet, existing_titles):
         print("\nIs your movie one of these?")
         print("1) None of these (add a new movie)")
         for i, movie in enumerate(acceptable_distances):
-            print(i+2, ") ", existing_titles[acceptable_distances[i][1]], "; ", acceptable_distances[i][0])
+            print(i+2, ") ", existing_titles[acceptable_distances[i][1]])
 
         while True:
             try:
