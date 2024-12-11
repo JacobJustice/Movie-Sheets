@@ -1,8 +1,6 @@
 # Movie-Sheets
 My tool for automating my google sheets movie list
 
-![Screenshot of my Movie Spreadsheet](data/spreadsheet-screenshot.png)
-
 I chose to use google sheets because it's a simple way to store data that I also want to share. Google sheets also has relatively intuitive and nice looking conditional formatting tools that I wanted to learn more about.
 
 The nice thing about sheets as well is you can programatically insert data using python, and the formatting rules will apply to the newly added data, you don't need to program in formatting as you enter data.
